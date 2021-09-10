@@ -1,0 +1,12 @@
+body{
+    font-family: Georgia, 'Times New Roman', Times, serif;
+    background: #ddcfbb;
+}
+
+.navbar-light{
+    background: #ddcfbb !important;
+}
+
+.nav-link{
+    color: black !important;
+}
