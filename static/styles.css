@@ -4,9 +4,30 @@ body{
 }
 
 .navbar-light{
-    background: #ddcfbb !important;
+    background: #cdbfab !important;
 }
 
 .nav-link{
     color: black !important;
+}
+
+main .form-control
+{
+    /* Center form controls */
+    display: inline-block;
+
+    /* Override Bootstrap's 100% width for form controls */
+    width: auto;
+}
+
+main
+{
+    /* Scroll horizontally as needed */
+    overflow-x: auto;
+}
+
+main img
+{
+    /* Constrain images on small screens */
+    max-width: 100%;
 }
