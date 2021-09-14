@@ -27,12 +27,12 @@
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbar">
-                {% if session.user_id %}
-                    <ul class="navbar-nav me-auto mt-2">
+                {% if current_user.is_authenticated %}
+                    <ul class="navbar-nav ms-auto mt-2 pe-3">
                         <li class="nav-item pt-2 px-2"><a class="nav-link" href="{{ url_for('about')}}">about</a></li>
                         <li class="nav-item pt-2 px-2"><a class="nav-link" href="{{ url_for('help')}}">help</a></li>
-                        <li class="nav-item px-2"><a class="nav-link" href="/account">account</a></li>
-                        <li class="nav-item px-2"><a class="nav-link" href="/new_group"><button class='btn btn-primary'>Create a group</button></a></li>
+                        <li class="nav-item pt-2 px-2"><a class="nav-link" href="{{ url_for('account')}}">account</a></li>
+                        <li class="nav-item px-2"><a class="nav-link" href="/new_group"><button class='btn btn-primary'>Create group</button></a></li>
                     </ul>
                 {% else %}
                     <ul class="navbar-nav ms-auto mt-2 pe-3">
