@@ -1,13 +1,19 @@
+import os
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_bcrypt import Bcrypt
 from flask_login import LoginManager
 from tempfile import mkdtemp
 
+# Set basedir
+basedir = os.path.abspath(os.path.dirname(__file__))
+
 # Configure application
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'cf43cc3cd14c6194695d8bbc492db6c5'
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///hotw.db'
+app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL', '').replace(
+        'postgres://', 'postgresql://') or \
+        'sqlite:///' + os.path.join(basedir, 'hotw.db')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 bcrypt = Bcrypt(app)
