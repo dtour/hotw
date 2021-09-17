@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, SubmitField, BooleanField
+from wtforms import StringField, PasswordField, SubmitField, BooleanField, TextAreaField
 from wtforms.validators import InputRequired, Email, EqualTo, ValidationError
 from application.models import User
 
@@ -20,3 +20,8 @@ class LoginForm(FlaskForm):
     password = PasswordField('Password', validators=[InputRequired()])
     remember = BooleanField('Remember Me')
     submit = SubmitField('Sign In')
+
+class NewGroupForm(FlaskForm):
+    group_name = StringField('Group name', validators=[InputRequired()])
+    members_emails = TextAreaField("Members' emails (comma separated)")
+    submit = SubmitField('Create group')

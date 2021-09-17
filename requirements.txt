@@ -1,3 +1,7 @@
 Flask
-Flask-Session
+Flask-Login
+Flask-Bcrypt
+Flask-SQLAlchemy
+WTForms
+Flask-WTF
 requests

@@ -1,6 +1,6 @@
 from application import app, db, bcrypt
-from flask import flash, redirect, render_template, url_for, request, session
-from application.forms import RegistrationForm, LoginForm
+from flask import flash, redirect, render_template, url_for, request
+from application.forms import RegistrationForm, LoginForm, NewGroupForm
 from application.models import User, Group, membership
 from flask_login import login_user, current_user, logout_user, login_required
 
@@ -83,3 +83,13 @@ def account():#todo
 @login_required
 def change_password():#todo
     return "Hello World!"
+
+@app.route('/new_group', methods=['GET','POST'])
+@login_required
+def new_group():#todo
+    form = NewGroupForm()
+    if form.validate_on_submit():
+        flash('Your group has been created!', 'success')
+        return redirect(url_for('home'))
+
+    return render_template('new_group.html', form=form)

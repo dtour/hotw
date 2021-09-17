@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+
+{% block title %}new group{% endblock %}
+{% block main %}
+<div class='container mt-4 px-5 text-center'>
+    <form method='POST' action=''>
+        {{ form.hidden_tag() }}
+        <div class="mb-3">
+            {{ form.group_name.label(class='form-control-label') }}:</br>
+            {% if form.group_name.errors %}
+                {{ form.group_name(class='form-control is-invalid', autocomplete='off', placeholder='Group name') }}
+                <div class='invalid-feedback'>
+                    {% for error in form.group_name.errors %}
+                        <span>{{ error }}</span>
+                    {% endfor %}
+                </div>
+            {% else %}
+                {{ form.group_name(class='form-control', autocomplete='off', placeholder='Group name') }}
+            {% endif %}
+        </div>
+        <div class="mb-3">
+            {{ form.members_emails.label(class='form-control-label') }}:</br>
+            {% if form.members_emails.errors %}
+                {{ form.members_emails(class='form-control is-invalid', autocomplete='off') }}
+                <div class='invalid-feedback'>
+                    {% for error in form.members_emails.errors %}
+                        <span>{{ error }}</span>
+                    {% endfor %}
+                </div>
+            {% else %}
+                {{ form.members_emails(class='form-control', autocomplete='off') }}
+            {% endif %}
+        </div>
+        
+         <div class="mb-3">
+          {{ form.submit(class='btn btn-primary') }}
+        </div>
+    </form>
+</div>
+{% endblock %}
