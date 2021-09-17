@@ -3,7 +3,6 @@ from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_bcrypt import Bcrypt
 from flask_login import LoginManager
-from tempfile import mkdtemp
 
 # Set basedir
 basedir = os.path.abspath(os.path.dirname(__file__))

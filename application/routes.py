@@ -4,9 +4,6 @@ from application.forms import RegistrationForm, LoginForm, NewGroupForm
 from application.models import User, Group, membership
 from flask_login import login_user, current_user, logout_user, login_required
 
-from werkzeug.exceptions import default_exceptions, HTTPException, InternalServerError
-from datetime import datetime
-
 # Routes
 @app.route('/')
 def index():#todo
