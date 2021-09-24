@@ -19,7 +19,7 @@ class LoginForm(FlaskForm):
     email = StringField('Email',validators=[InputRequired(), Email()])
     password = PasswordField('Password', validators=[InputRequired()])
     remember = BooleanField('Remember Me')
-    submit = SubmitField('Sign In')
+    submit = SubmitField('Sign in')
 
 class NewGroupForm(FlaskForm):
     group_name = StringField('Group name', validators=[InputRequired()])
@@ -28,7 +28,7 @@ class NewGroupForm(FlaskForm):
 
 class RequestResetForm(FlaskForm):
     email = StringField('Email',validators=[InputRequired(), Email()])
-    submit = SubmitField('Request Password Reset')
+    submit = SubmitField('Request password reset')
 
     def validate_email(self, email):
         user = User.query.filter_by(email=email.data).first()
@@ -39,4 +39,4 @@ class RequestResetForm(FlaskForm):
 class ResetPasswordForm(FlaskForm):
     password = PasswordField('Password', validators=[InputRequired()])
     confirm_password = PasswordField('Confirm Password', validators=[InputRequired(), EqualTo('password')])
-    submit = SubmitField('Reset Password')
+    submit = SubmitField('Reset password')
