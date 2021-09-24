@@ -1,10 +1,10 @@
 body{
     font-family: Georgia, 'Times New Roman', Times, serif;
-    background: #ddcfbb;
+    /* background: #ddcfbb; */
 }
 
 .navbar-light{
-    background: #cdbfab !important;
+    /* background: #cdbfab !important; */
 }
 
 .nav-link{

@@ -11,25 +11,22 @@ def index():#todo
 
 @app.route('/home')
 @login_required
-def home():#todo
+def home():
     return render_template('home.html')
 
 @app.route('/about')
-def about():#todo
+def about():
     return render_template('about.html')
     
 @app.route('/help')
-def help():#todo
+def help():
     return render_template('help.html')
 
-@app.route('/contact')
-def contact():#todo
-    return render_template('contact.html')
-
 @app.route('/register', methods=['GET','POST'])
-def register():#todo
+def register():
+    if current_user.is_authenticated:
+        return redirect(url_for('home'))
     form = RegistrationForm()
-
     # Check if form was valid
     if form.validate_on_submit():
         # Hash password and store login info in db
@@ -37,17 +34,18 @@ def register():#todo
         user = User(email=form.email.data, password_hash=hashed_password)
         db.session.add(user)
         db.session.commit()
-
+        login_user(user, remember=True)
         flash(f'Account created for {form.email.data}!', category='success')
         return redirect(url_for('home'))
 
-
+    
     return render_template('register.html', title='Register', form=form)
 
 @app.route('/sign_in', methods=['GET','POST'])
-def sign_in():#todo
+def sign_in():
+    if current_user.is_authenticated:
+        return redirect(url_for('home'))
     form = LoginForm()
-
     # Check if form was valid
     if form.validate_on_submit():
         user = User.query.filter_by(email=form.email.data).first()
@@ -81,12 +79,30 @@ def account():#todo
 def change_password():#todo
     return "Hello World!"
 
-@app.route('/new_group', methods=['GET','POST'])
+@app.route('/group/new', methods=['GET','POST'])
 @login_required
 def new_group():#todo
     form = NewGroupForm()
     if form.validate_on_submit():
-        flash('Your group has been created!', 'success')
+        # Add new group to database
+        group = Group(name=form.group_name.data, creator_id=current_user.get_id())
+        db.session.add(group)
+        db.session.commit()
+        # Process members_email field into seperate emails
+        members_emails = ''.join(form.members_emails.data.split()).split(sep=',')
+        # Send emails to potential members asking if they want to join
+
+        #do the below 3 steps in a new function
+        # If they confirm they want to join, add User to memberships table
+
+        # If they join, ask them to create an account if they don't have one
+
+        # After they create an account, automatically add user to memberships table
+        
+
+
+
+        flash('Your group has been created! Members have been emailed a confirmation link.', 'success')
         return redirect(url_for('home'))
 
     return render_template('new_group.html', form=form)
