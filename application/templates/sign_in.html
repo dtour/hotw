@@ -33,7 +33,7 @@
           {{ form.submit(class='btn btn-primary') }}
         </div>
         <small class='text-muted ml-2 text-start'>
-            <a href='#'>Forgot password?</a>
+            <a href='{{ url_for("reset_request") }}'>Forgot password?</a>
         </small>
     </form>
     <div class='pt-3'>

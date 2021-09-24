@@ -10,9 +10,9 @@ class RegistrationForm(FlaskForm):
     submit = SubmitField('Register')
 
     def validate_email(self, email):
-        email = User.query.filter_by(email=email.data).first()
+        user = User.query.filter_by(email=email.data).first()
 
-        if email:
+        if user:
             raise ValidationError('Email already in use')
 
 class LoginForm(FlaskForm):
@@ -25,3 +25,18 @@ class NewGroupForm(FlaskForm):
     group_name = StringField('Group name', validators=[InputRequired()])
     members_emails = TextAreaField("Members' emails (comma separated)")
     submit = SubmitField('Create group')
+
+class RequestResetForm(FlaskForm):
+    email = StringField('Email',validators=[InputRequired(), Email()])
+    submit = SubmitField('Request Password Reset')
+
+    def validate_email(self, email):
+        user = User.query.filter_by(email=email.data).first()
+        
+        if user is None:
+            raise ValidationError('There is no account associated with this email.')
+
+class ResetPasswordForm(FlaskForm):
+    password = PasswordField('Password', validators=[InputRequired()])
+    confirm_password = PasswordField('Confirm Password', validators=[InputRequired(), EqualTo('password')])
+    submit = SubmitField('Reset Password')

@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+
+{% block title %}reset password{% endblock %}
+{% block main %}
+<div class='container mt-4 px-5 text-center'>
+    <form method='POST' action=''>
+        {{ form.hidden_tag() }}
+        <div class="mb-3">
+            {% if form.password.errors %}
+                {{ form.password(class='form-control is-invalid', autocomplete='off', placeholder='Password') }}
+                <div class='invalid-feedback'>
+                    {% for error in form.password.errors %}
+                        <span>{{ error }}</span>
+                    {% endfor %}
+                </div>
+            {% else %}
+                {{ form.password(class='form-control', autocomplete='off', placeholder='Password') }}
+            {% endif %}
+        </div>
+        <div class="mb-3">
+            {% if form.confirm_password.errors %}
+                {{ form.confirm_password(class='form-control is-invalid', autocomplete='off', placeholder='Confirm password') }}
+                <div class='invalid-feedback'>
+                    {% for error in form.confirm_password.errors %}
+                        <span>{{ error }}</span>
+                    {% endfor %}
+                </div>
+            {% else %}
+                {{ form.confirm_password(class='form-control', autocomplete='off', placeholder='Confirm password') }}
+            {% endif %}
+          </div>
+        <div class="mb-3">
+          {{ form.submit(class='btn btn-primary') }}
+        </div>
+    </form>
+</div>
+{% endblock %}
