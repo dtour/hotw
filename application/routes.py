@@ -1,10 +1,13 @@
-from application import app, db, bcrypt, mail
+from application import app, db, bcrypt
 from flask import flash, redirect, render_template, url_for, request
 from application.forms import (RegistrationForm, LoginForm, NewGroupForm, 
                                RequestResetForm, ResetPasswordForm)
 from application.models import User, Group, membership
 from flask_login import login_user, current_user, logout_user, login_required
-from flask_mail import Message
+import os
+from sendgrid import SendGridAPIClient
+from sendgrid.helpers.mail import Mail
+
 
 # Routes
 @app.route('/')
@@ -106,18 +109,24 @@ def new_group():#todo
 
 def send_reset_email(user):
     token = user.get_reset_token()
-    msg = Message('Password Reset Request', sender='dtour@hotw.app', recipients=[user.email])
-    msg.body = f'''To reset your password, visit the following link within the next hour:
+
+    message = Mail(
+    from_email='dtour@hotw.app',
+    to_emails=[user.email],
+    subject='Password Reset Request',
+    html_content=
+    f'''To reset your password, visit the following link within the next hour:
 {url_for('reset_token', token=token, _external=True)}
     
 If you did not make this request then simply ignore this email and no changes will be made.
 '''
-    mail.send(msg)
+    )
+
+    sg = SendGridAPIClient(os.environ.get('SENDGRID_API_KEY'))
+    sg.send(message)
 
 @app.route('/reset_password', methods=['GET','POST'])
 def reset_request():
-    if current_user.is_authenticated:
-        return redirect(url_for('home'))
     form = RequestResetForm()
 
     if form.validate_on_submit():
@@ -129,8 +138,6 @@ def reset_request():
 
 @app.route('/reset_password/<token>', methods=['GET','POST'])
 def reset_token(token):
-    if current_user.is_authenticated:
-        return redirect(url_for('home'))
     user = User.verify_reset_token(token)
 
     if not user:
