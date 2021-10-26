@@ -76,7 +76,7 @@ def sign_out():
 def account():#todo
     return render_template('account.html')
 
-@app.route('/group/new', methods=['GET','POST'])
+@app.route('new_group', methods=['GET','POST'])
 @login_required
 def new_group():#todo
     form = NewGroupForm()
