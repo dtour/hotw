@@ -11,7 +11,7 @@ from flask_login import login_user, current_user, logout_user, login_required
 def index():#todo
     return render_template('index.html')
 
-@app.route('/home')
+@app.route('/home', methods=['GET','POST'])
 @login_required
 def home():
     my_groups = []
@@ -95,7 +95,7 @@ def new_group():#todo
         # Send emails to potential members asking if they want to join
         for invitee in members_emails:
             send_join_group_email(group, current_user, invitee)
-
+            # drop existing group first to avoid overlap
         flash('Your group has been created! Members have been emailed an invitation.', 'success')
         return redirect(url_for('home'))
 
