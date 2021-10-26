@@ -15,8 +15,8 @@ def index():#todo
 @login_required
 def home():
     my_groups = []
-    # for group in current_user.membership:
-    #     my_groups.append(group)
+    for group in current_user.membership:
+        my_groups.append(group)
 
     return render_template('home.html', my_groups=my_groups)
 
@@ -80,7 +80,7 @@ def sign_out():
 def account():#todo
     return render_template('account.html')
 
-@app.route('new_group', methods=['GET','POST'])
+@app.route('/new_group', methods=['GET','POST'])
 @login_required
 def new_group():#todo
     form = NewGroupForm()
