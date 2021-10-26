@@ -23,10 +23,10 @@ def send_reset_email(user):
 
 def send_join_group_email(group, inviter, invitee):
     token = group.get_join_group_token()
-    
+
     message = Mail(
     from_email='dtour@hotw.app',
-    to_emails=[invitee.email],
+    to_emails=[invitee],
     subject=f'{inviter.email} has invited you to join their Highlight of the Week group',
     html_content=
     f'''To join {inviter.email}'s group, please click on the link below:
