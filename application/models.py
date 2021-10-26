@@ -42,3 +42,16 @@ class Group(db.Model):
     
     def __repr__(self):
         return f"Group('{self.name}')"
+    
+    def get_join_group_token(self, expires_sec=604800):
+        s = Serializer(app.config['SECRET_KEY'], expires_sec)
+        return s.dumps({'group_id': self.id}).decode('utf-8')
+    
+    @staticmethod
+    def verify_join_group_token(token):
+        s = Serializer(app.config['SECRET_KEY'])
+        try:
+            group_id = s.loads(token)['group_id']
+        except:
+            return None
+        return Group.query.get(group_id)

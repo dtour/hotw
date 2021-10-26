@@ -3,11 +3,8 @@ from flask import flash, redirect, render_template, url_for, request
 from application.forms import (RegistrationForm, LoginForm, NewGroupForm, 
                                RequestResetForm, ResetPasswordForm)
 from application.models import User, Group, membership
+from application.email_helpers import send_reset_email, send_join_group_email
 from flask_login import login_user, current_user, logout_user, login_required
-import os
-from sendgrid import SendGridAPIClient
-from sendgrid.helpers.mail import Mail
-
 
 # Routes
 @app.route('/')
@@ -84,46 +81,35 @@ def account():#todo
 def new_group():#todo
     form = NewGroupForm()
     if form.validate_on_submit():
-        # Add new group to database
+        # Add new group to database and add creator to memberships table
         group = Group(name=form.group_name.data, creator_id=current_user.get_id())
         db.session.add(group)
+        group.members.append(current_user)
         db.session.commit()
         # Process members_email field into seperate emails
         members_emails = ''.join(form.members_emails.data.split()).split(sep=',')
         # Send emails to potential members asking if they want to join
+        for invitee in members_emails:
+            send_join_group_email(group, current_user, invitee)
 
-        #do the below 3 steps in a new function
-        # If they confirm they want to join, add User to memberships table
-
-        # If they join, ask them to create an account if they don't have one
-
-        # After they create an account, automatically add user to memberships table
-        
-
-
-
-        flash('Your group has been created! Members have been emailed a confirmation link.', 'success')
+        flash('Your group has been created! Members have been emailed an invitation.', 'success')
         return redirect(url_for('home'))
 
     return render_template('new_group.html', form=form)
 
-def send_reset_email(user):
-    token = user.get_reset_token()
+@app.route('/join_group/<token>')
+@login_required
+def join_group(token):
+    group = Group.verify_join_group_token(token)
 
-    message = Mail(
-    from_email='dtour@hotw.app',
-    to_emails=[user.email],
-    subject='Password Reset Request',
-    html_content=
-    f'''To reset your password, visit the following link within the next hour:
-{url_for('reset_token', token=token, _external=True)}
+    if not group:
+        flash('That is an invalid or expired invitation', 'danger')
+        return redirect(url_for('home'))
     
-If you did not make this request then simply ignore this email and no changes will be made.
-'''
-    )
-
-    sg = SendGridAPIClient(os.environ.get('SENDGRID_API_KEY'))
-    sg.send(message)
+    group.members.append(current_user)
+    db.session.commit()
+    flash(f'You have joined {group.name}!', category='success')
+    return redirect(url_for('home'))
 
 @app.route('/reset_password', methods=['GET','POST'])
 def reset_request():
@@ -132,7 +118,7 @@ def reset_request():
     if form.validate_on_submit():
         user = User.query.filter_by(email=form.email.data).first()
         send_reset_email(user)
-        flash('An email has been sent with instructions to reset your password')
+        flash('An email has been sent with instructions to reset your password', category='success')
         return redirect(url_for('sign_in'))
     return render_template('reset_request.html', form=form)
 
@@ -141,7 +127,7 @@ def reset_token(token):
     user = User.verify_reset_token(token)
 
     if not user:
-        flash('That is an invalid or expired token', 'warning')
+        flash('That is an invalid or expired token', 'danger')
         return redirect(url_for('reset_request'))
     
     form = ResetPasswordForm()
