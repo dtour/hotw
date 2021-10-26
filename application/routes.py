@@ -14,7 +14,8 @@ def index():#todo
 @app.route('/home')
 @login_required
 def home():
-    return render_template('home.html')
+    my_groups = current_user.membership
+    return render_template('home.html', my_groups=my_groups)
 
 @app.route('/about')
 def about():
