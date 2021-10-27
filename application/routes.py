@@ -9,7 +9,9 @@ from flask_login import login_user, current_user, logout_user, login_required
 
 # Routes
 @app.route('/')
-def index():#todo
+def index():
+    if current_user.is_authenticated:
+        return redirect(url_for('home'))
     return render_template('index.html')
 
 @app.route('/home', methods=['GET','POST'])
@@ -17,7 +19,7 @@ def index():#todo
 def home():
     my_groups = []
     for group in current_user.membership:
-        if Submission.query.filter_by(user_id=current_user.get_id(), group_id=group.get_id(),
+        if Submission.query.filter_by(user_id=current_user.get_id(), group_id=group.id,
                                       week=datetime.datetime.utcnow().isocalendar().week).first():
             submission_status = True
         else:
@@ -27,8 +29,8 @@ def home():
         my_groups.append([group, submission_status, form])
 
         if form.validate_on_submit():
-            submission = Submission(user_id=current_user.get_id(), group_id=group.get_id(),
-                                      week=datetime.datetime.utcnow().isocalendar().week,submission_text=form.highlight.data)
+            submission = Submission(user_id=current_user.get_id(), group_id=group.id,
+                                      week=datetime.datetime.utcnow().isocalendar().week, submission_text=form.highlight.data)
             db.session.add(submission)
             db.session.commit()
             flash(f'Your highlight has been submitted!', category='success')
