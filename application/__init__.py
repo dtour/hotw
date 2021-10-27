@@ -19,6 +19,4 @@ login_manager = LoginManager(app)
 login_manager.login_view = 'sign_in'
 login_manager.login_message_category = 'info'
 
-db.drop_all()
-db.create_all()
 from application import routes
