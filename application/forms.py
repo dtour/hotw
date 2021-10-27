@@ -1,6 +1,6 @@
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, SubmitField, BooleanField, TextAreaField
-from wtforms.validators import InputRequired, Email, EqualTo, ValidationError
+from wtforms.validators import InputRequired, Email, EqualTo, ValidationError, URL
 from application.models import User
 
 class RegistrationForm(FlaskForm):
@@ -40,3 +40,7 @@ class ResetPasswordForm(FlaskForm):
     password = PasswordField('Password', validators=[InputRequired()])
     confirm_password = PasswordField('Confirm Password', validators=[InputRequired(), EqualTo('password')])
     submit = SubmitField('Reset password')
+
+class SubmissionForm(FlaskForm):
+    highlight = StringField('Your highlight', validators=[InputRequired(), URL()])
+    submit = SubmitField('Submit highlight')

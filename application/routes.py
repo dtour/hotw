@@ -1,8 +1,9 @@
+import datetime
 from application import app, db, bcrypt
 from flask import flash, redirect, render_template, url_for, request
 from application.forms import (RegistrationForm, LoginForm, NewGroupForm, 
-                               RequestResetForm, ResetPasswordForm)
-from application.models import User, Group, membership
+                               RequestResetForm, ResetPasswordForm, SubmissionForm)
+from application.models import Submission, User, Group, membership
 from application.email_helpers import send_reset_email, send_join_group_email
 from flask_login import login_user, current_user, logout_user, login_required
 
@@ -16,7 +17,22 @@ def index():#todo
 def home():
     my_groups = []
     for group in current_user.membership:
-        my_groups.append(group)
+        if Submission.query.filter_by(user_id=current_user.get_id(), group_id=group.get_id(),
+                                      week=datetime.datetime.utcnow().isocalendar().week).first():
+            submission_status = True
+        else:
+            submission_status = False
+
+        form = SubmissionForm()
+        my_groups.append([group, submission_status, form])
+
+        if form.validate_on_submit():
+            submission = Submission(user_id=current_user.get_id(), group_id=group.get_id(),
+                                      week=datetime.datetime.utcnow().isocalendar().week,submission_text=form.highlight.data)
+            db.session.add(submission)
+            db.session.commit()
+            flash(f'Your highlight has been submitted!', category='success')
+            return redirect(url_for('home'))
 
     return render_template('home.html', my_groups=my_groups)
 

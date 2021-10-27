@@ -5,19 +5,33 @@
 <div class="container px-4 py-2 mt-4 mb-1">
     <h5>My groups</h5>
         {% if my_groups %}
-            {% for group in my_groups %}
-                <h6>{{ group.name }}</h6>
-                {% if group.submitted %}
+            {% for item in my_groups %}
+                <h6>{{ item[0].name }}</h6>
+                {% if item[1] %}
                 <p>You've already submitted your highlight for this week!</p>
                 {% else %}
-                <form class="col-12">
-                    <input type="url" class="form-control form-control-dark" placeholder="URL" aria-label="URL">
-                    <button type="submit" class="btn btn-primary">Submit</button>
+                <form method='POST' action=''>
+                    {{ item[3].hidden_tag() }}
+                    <div class="mb-3">
+                        {% if item[3].highlight.errors %}
+                            {{ item[3].highlight(class='form-control is-invalid', autocomplete='off', placeholder='Highlight URL', autofocus='') }}
+                            <div class='invalid-feedback'>
+                                {% for error in item[3].highlight.errors %}
+                                    <span>{{ error }}</span>
+                                {% endfor %}
+                            </div>
+                        {% else %}
+                            {{ item[3].highlight(class='form-control', autocomplete='off', placeholder='Highlight URL', autofocus='') }}
+                        {% endif %}
+                    </div>
+                     <div>
+                      {{ item[3].submit(class='btn btn-primary') }}
+                    </div>
                 </form>
                 {% endif %}
             {% endfor %}
         {% else %}
-        <p class=''> You have no groups! Go make one!</p>
+        <p class='lead'> You have no groups! Go make one!</p>
         {% endif %}
 </div>
 {% endblock %}

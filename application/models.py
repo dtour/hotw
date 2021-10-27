@@ -1,3 +1,4 @@
+import datetime
 from application import db, login_manager, app
 from flask_login import UserMixin
 from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
@@ -5,6 +6,15 @@ from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
 @login_manager.user_loader
 def load_user(user_id):
     return User.query.get(int(user_id))
+
+class Submission(db.Model):
+    __tablename__ = 'submissions'
+    id = db.Column(db.Integer, primary_key = True)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    group_id = db.Column(db.Integer, db.ForeignKey('group.id'), nullable=False)
+    week = db.Column(db.Integer, default=datetime.datetime.utcnow().isocalendar().week)
+    submission_text = db.Column(db.Text, nullable=False)
+    __table_args__ = (db.UniqueConstraint('user_id', 'group_id','week'),)
 
 membership = db.Table('membership',
     db.Column('user_id', db.Integer, db.ForeignKey('user.id')),
