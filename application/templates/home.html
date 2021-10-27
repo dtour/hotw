@@ -11,21 +11,21 @@
                 <p>You've already submitted your highlight for this week!</p>
                 {% else %}
                 <form method='POST' action=''>
-                    {{ item[3].hidden_tag() }}
+                    {{ item[2].hidden_tag() }}
                     <div class="mb-3">
-                        {% if item[3].highlight.errors %}
-                            {{ item[3].highlight(class='form-control is-invalid', autocomplete='off', placeholder='Highlight URL', autofocus='') }}
+                        {% if item[2].highlight.errors %}
+                            {{ item[2].highlight(class='form-control is-invalid', autocomplete='off', placeholder='Highlight URL', autofocus='') }}
                             <div class='invalid-feedback'>
                                 {% for error in item[3].highlight.errors %}
                                     <span>{{ error }}</span>
                                 {% endfor %}
                             </div>
                         {% else %}
-                            {{ item[3].highlight(class='form-control', autocomplete='off', placeholder='Highlight URL', autofocus='') }}
+                            {{ item[2].highlight(class='form-control', autocomplete='off', placeholder='Highlight URL', autofocus='') }}
                         {% endif %}
                     </div>
                      <div>
-                      {{ item[3].submit(class='btn btn-primary') }}
+                      {{ item[2].submit(class='btn btn-primary') }}
                     </div>
                 </form>
                 {% endif %}
