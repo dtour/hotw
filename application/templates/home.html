@@ -16,7 +16,7 @@
                         {% if item[2].highlight.errors %}
                             {{ item[2].highlight(class='form-control is-invalid', autocomplete='off', placeholder='Highlight URL', autofocus='') }}
                             <div class='invalid-feedback'>
-                                {% for error in item[3].highlight.errors %}
+                                {% for error in item[2].highlight.errors %}
                                     <span>{{ error }}</span>
                                 {% endfor %}
                             </div>
