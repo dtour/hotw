@@ -3,9 +3,15 @@ from application import app, db, bcrypt
 from flask import flash, redirect, render_template, url_for, request
 from application.forms import (RegistrationForm, LoginForm, NewGroupForm, 
                                RequestResetForm, ResetPasswordForm, SubmissionForm)
-from application.models import Submission, User, Group, membership
-from application.email_helpers import send_reset_email, send_join_group_email
+from application.models import Submission, User, Group
+from application.email_helpers import send_reset_email, send_join_group_email, send_all_highlight_email
 from flask_login import login_user, current_user, logout_user, login_required
+from apscheduler.schedulers.background import BackgroundScheduler
+
+# Background scheduler to send weekly emails
+sched = BackgroundScheduler(daemon=True)
+sched.add_job(send_all_highlight_email,'cron',day_of_week='mon',hour='8',timezone='utc')
+sched.start()
 
 # Routes
 @app.route('/')
