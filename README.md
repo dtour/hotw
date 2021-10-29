@@ -1,6 +1,6 @@
 # Highlight of the week
 
-https://www.hotw.app/
+www.hotw.app
 
 Highlight of the Week is a free group newsletter service that allows people to share and discover interesting online content. Users form a group, submit their weekly highlight, and receive an email of the group's collated highlights at the end of the week. We ask you to share 'the most interesting thing you've come across this week – articles, videos, podcasts, anything at all.
 
