@@ -44,7 +44,7 @@ def home():
         flash(f'Your highlight has been submitted!', category='success')
         return redirect(url_for('home'))
 
-        return render_template('home.html', my_groups=my_groups)
+    return render_template('home.html', my_groups=my_groups)
 
 @app.route('/about')
 def about():
