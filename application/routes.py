@@ -24,7 +24,6 @@ def index():
 @login_required
 def home():
     my_groups = []
-    i=0
     for group in current_user.membership:
         if Submission.query.filter_by(user_id=current_user.get_id(), group_id=group.id,
                                       week=datetime.datetime.utcnow().isocalendar().week).first():
@@ -33,19 +32,19 @@ def home():
             submission_status = False
 
         # Generate unique instance of form
-        i =+ 1
-        form = SubmissionForm(prefix=str(i))
+        form = SubmissionForm(prefix=str(group.id))
         my_groups.append([group, submission_status, form])
 
-        if form.validate_on_submit():
-            submission = Submission(user_id=current_user.get_id(), group_id=group.id,
-                                      week=datetime.datetime.utcnow().isocalendar().week, submission_text=form.highlight.data)
-            db.session.add(submission)
-            db.session.commit()
-            flash(f'Your highlight has been submitted!', category='success')
-            return redirect(url_for('home'))
+    if form.validate_on_submit():
+        group_id=int(form.highlight.name.split('-')[0])
+        submission = Submission(user_id=current_user.get_id(), group_id=group_id,
+                                    week=datetime.datetime.utcnow().isocalendar().week, submission_text=form.highlight.data)
+        db.session.add(submission)
+        db.session.commit()
+        flash(f'Your highlight has been submitted!', category='success')
+        return redirect(url_for('home'))
 
-    return render_template('home.html', my_groups=my_groups)
+        return render_template('home.html', my_groups=my_groups)
 
 @app.route('/about')
 def about():
