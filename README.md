@@ -8,3 +8,5 @@ Whether it be with close friends or new acquaintances, seeing what someone likes
 Seeing what others find interesting on a regular basis is also a great way to get out of your 'intellectual' box – to discover interests and perspectives. It's particularly valuable when it comes from those that you trust or respect.
 
 Highlight of the Week aims to make establishing a practice of sharing weekly highlights as effortless as possible. Email tends to be the most effective way of doing so, fitting in seamlessly with users that are already familiar with newsletters and allowing users to engage with the highlights at their conveneince.
+
+A video demo can be found [here](https://youtu.be/Sc7pB8r-JvA).
