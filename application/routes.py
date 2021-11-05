@@ -10,7 +10,7 @@ from apscheduler.schedulers.background import BackgroundScheduler
 
 # Background scheduler to send weekly emails
 sched = BackgroundScheduler(daemon=True)
-sched.add_job(send_all_highlight_email,'cron',day_of_week='mon',hour='8',timezone='utc')
+sched.add_job(send_all_highlight_email,'cron',day_of_week='sun',hour='8',timezone='utc')
 sched.start()
 
 # Routes
@@ -24,6 +24,7 @@ def index():
 @login_required
 def home():
     my_groups = []
+    i=0
     for group in current_user.membership:
         if Submission.query.filter_by(user_id=current_user.get_id(), group_id=group.id,
                                       week=datetime.datetime.utcnow().isocalendar().week).first():
@@ -31,7 +32,9 @@ def home():
         else:
             submission_status = False
 
-        form = SubmissionForm()
+        # Generate unique instance of form
+        i =+ 1
+        form = SubmissionForm(prefix=i)
         my_groups.append([group, submission_status, form])
 
         if form.validate_on_submit():

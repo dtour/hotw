@@ -3,7 +3,7 @@
 {% block title %}home{% endblock %}
 {% block main %}
 <div class="container px-4 py-2 mt-4 mb-1">
-    <h5>My groups</h5>
+    <h5 class='py-4'>My groups</h5>
         {% if my_groups %}
             {% for item in my_groups %}
                 <h6>{{ item[0].name }}</h6>
