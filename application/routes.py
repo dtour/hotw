@@ -34,7 +34,7 @@ def home():
 
         # Generate unique instance of form
         i =+ 1
-        form = SubmissionForm(prefix=i)
+        form = SubmissionForm(prefix=str(i))
         my_groups.append([group, submission_status, form])
 
         if form.validate_on_submit():
